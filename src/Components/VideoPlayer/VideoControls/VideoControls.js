@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import {
   PlayPauseIcon,
   TheaterIcon,
@@ -16,8 +16,8 @@ const VideoControls = ({
   toggleTheaterMode,
   fullScreenMode,
   toggleFullScreenMode,
+  timelineContainerRef,
 }) => {
-  const timelineContainerRef = useRef(null);
   const [mutedVideo, setMutedVideo] = useState(false);
   const [captionsMode, setCaptionsMode] = useState(false);
 

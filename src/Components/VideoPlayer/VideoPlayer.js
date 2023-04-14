@@ -10,12 +10,11 @@ const VideoPlayer = () => {
   const [fullScreenMode, setfullScreenMode] = useState(false);
   const [time, setTime] = useState(0);
   const videoRef = useRef(null);
+  const timelineContainerRef = useRef(null);
   function togglePlayVideo() {
-    console.log(videoRef);
     videoRef.current.paused
       ? videoRef.current.play()
       : videoRef.current.pause();
-    console.log(playVideo);
     setPlayVideo(!playVideo);
   }
   function toggleTheaterMode() {
@@ -23,6 +22,13 @@ const VideoPlayer = () => {
   }
   function toggleFullScreenMode() {
     setfullScreenMode(!fullScreenMode);
+  }
+  function currentTimestamp() {
+    const percent = videoRef.current.currentTime / videoRef.current.duration;
+    timelineContainerRef.current.style.setProperty(
+      "--progress-position",
+      percent
+    );
   }
   return (
     <div
@@ -41,6 +47,7 @@ const VideoPlayer = () => {
         toggleTheaterMode={toggleTheaterMode}
         fullScreenMode={fullScreenMode}
         toggleFullScreenMode={toggleFullScreenMode}
+        timelineContainerRef={timelineContainerRef}
       />
       <video
         src={video}
@@ -61,6 +68,7 @@ const VideoPlayer = () => {
             ...prvsTime,
             current: formatDuration(e.target.currentTime),
           }));
+          currentTimestamp();
         }}
       >
         <track
