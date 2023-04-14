@@ -1,109 +1,72 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   PlayPauseIcon,
   TheaterIcon,
   FullScreenIcon,
   MuteIcon,
   CaptionsIcon,
-} from "../../../Utils/Icons/Icons";
+} from "../../../Utils/Icons";
 import "./VideoControlsStyles.scss";
-const VideoControls = ({
-  videoRef,
-  time,
-  playVideo,
-  togglePlayVideo,
-  theaterMode,
-  toggleTheaterMode,
-  fullScreenMode,
-  toggleFullScreenMode,
-  timelineContainerRef,
-}) => {
-  const [mutedVideo, setMutedVideo] = useState(false);
-  const [captionsMode, setCaptionsMode] = useState(false);
-
-  return (
-    <div className='video-controls-container'>
-      <div
-        className='timeline-container'
-        ref={timelineContainerRef}
-        onMouseDown={e => {
-          handleTimeLineUpdate(e);
-        }}
-      >
-        <div className='timeline'>
-          <div className='thumb-indicator'></div>
-        </div>
-      </div>
-      <div className='controls'>
-        <button
-          onClick={() => {
-            togglePlayVideo();
-          }}
-        >
-          <PlayPauseIcon isModeOn={playVideo} />
-        </button>
-        <button
-          className='mute-button'
-          onClick={() => {
-            toggleMute();
-          }}
-        >
-          <MuteIcon isModeOn={mutedVideo} />
-        </button>
-        <div className='duration-container'>
-          <div className='current-time'>{time.current}</div>
-          <span>/</span>
-          <div className='total-time'>{time.duration}</div>
-        </div>
-        <button
-          className={`captions-button ${captionsMode ? "captions-on" : ""}`}
-          onClick={() => {
-            toggleCaptions();
-          }}
-        >
-          <CaptionsIcon />
-        </button>
-        <button
-          className='theater-button'
-          onClick={() => {
-            toggleTheaterMode();
-          }}
-        >
-          <TheaterIcon isModeOn={theaterMode} />
-        </button>
-        <button
-          className='full-screen-button'
-          onClick={() => toggleFullScreenMode()}
-        >
-          <FullScreenIcon isModeOn={fullScreenMode} />
-        </button>
-      </div>
-    </div>
-  );
-  function toggleMute() {
-    videoRef.current.muted = !mutedVideo;
-    setMutedVideo(!mutedVideo);
-  }
-  function toggleCaptions() {
-    const captions = videoRef.current.textTracks[0];
-    if (captionsMode) {
-      captions.mode = "hidden";
-    } else {
-      captions.mode = "showing";
-    }
-    setCaptionsMode(!captionsMode);
-  }
+const VideoControls = ({ timelineContainerRef, videoStatus }) => {
   function handleTimeLineUpdate(e) {
     e.preventDefault();
     const rect = timelineContainerRef.current.getBoundingClientRect();
+    const video = videoStatus.videoRef.current;
     const percent =
       Math.min(Math.max(0, e.pageX - rect.x), rect.width) / rect.width;
     timelineContainerRef.current.style.setProperty(
       "--progress-position",
       percent
     );
-    videoRef.current.currentTime = percent * videoRef.current.duration;
+    video.currentTime = percent * video.duration;
   }
+
+  return (
+    <div className='video-controls-container'>
+      <div
+        className='timeline-container'
+        ref={timelineContainerRef}
+        onMouseDown={handleTimeLineUpdate}
+      >
+        <div className='timeline'>
+          <div className='thumb-indicator'></div>
+        </div>
+      </div>
+      <div className='controls'>
+        <button onClick={videoStatus.togglePlayVideo}>
+          <PlayPauseIcon isModeOn={videoStatus.playVideo} />
+        </button>
+        <button className='mute-button' onClick={videoStatus.toggleMute}>
+          <MuteIcon isModeOn={videoStatus.mutedVideo} />
+        </button>
+        <div className='duration-container'>
+          <div className='current-time'>{videoStatus.time.current}</div>
+          <span>/</span>
+          <div className='total-time'>{videoStatus.time.duration}</div>
+        </div>
+        <button
+          className={`captions-button ${
+            videoStatus.captionsMode ? "captions-on" : ""
+          }`}
+          onClick={videoStatus.toggleCaptions}
+        >
+          <CaptionsIcon />
+        </button>
+        <button
+          className='theater-button'
+          onClick={videoStatus.toggleTheaterMode}
+        >
+          <TheaterIcon isModeOn={videoStatus.theaterMode} />
+        </button>
+        <button
+          className='full-screen-button'
+          onClick={videoStatus.toggleFullScreenMode}
+        >
+          <FullScreenIcon isModeOn={videoStatus.fullScreenMode} />
+        </button>
+      </div>
+    </div>
+  );
 };
 
-export default VideoControls;
+export { VideoControls };

@@ -1,7 +1,7 @@
 const leadingZeroFormatter = new Intl.NumberFormat(undefined, {
   minimumIntegerDigits: 2,
 });
-export function formatDuration(time) {
+export function formatTimeDuration(time) {
   const seconds = Math.floor(time % 60);
   const minutes = Math.floor(time / 60) % 60;
   const hours = Math.floor(time / 3600);

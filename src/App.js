@@ -1,9 +1,7 @@
-import './App.css';
-import VideoPlayer from './Components/VideoPlayer/VideoPlayer';
+import "./App.css";
+import { VideoPlayer } from "./Components/VideoPlayer/VideoPlayer";
 function App() {
-  return (
-		<VideoPlayer />
-  );
+  return <VideoPlayer />;
 }
 
 export default App;
