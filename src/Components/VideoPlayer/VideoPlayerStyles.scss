@@ -1,0 +1,30 @@
+.video-player-container {
+  width: 90%;
+  max-width: 1000px;
+  display: flex;
+  justify-content: center;
+  margin-inline: auto;
+  position: relative;
+  background-color: black;
+  &:hover,
+  &.paused,
+  &:focus-within {
+    .video-controls-container {
+      opacity: 0.9;
+    }
+  }
+  &.theater,
+  &.full-screen {
+    max-width: initial;
+    width: 100%;
+  }
+  &.theater {
+    max-height: 80dvh;
+  }
+  &.full-screen {
+    max-height: 100dvh;
+  }
+  video {
+    width: 100%;
+  }
+}
